@@ -87,7 +87,7 @@
                     <h1>Welcome</h1>
                     <p class="subtitle">To keep connected with us, please login with your personal info.</p>
 
-                    <form id="signinForm" method="post" action="login.php" novalidate>
+                    <form id="signinForm" method="post" action="singin.php" novalidate>
 
                         <?php if ($message != '') { ?>
                             <div class="form-alert success"><?php echo $message; ?></div>

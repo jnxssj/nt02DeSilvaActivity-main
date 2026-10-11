@@ -205,7 +205,7 @@
                         <li class="step <?php if ($startStep == 3) { echo 'active'; } ?>" id="stepDot3"><span>3</span></li>
                     </ol>
 
-                    <form id="signupForm" method="post" action="register.php" enctype="multipart/form-data" novalidate>
+                    <form id="signupForm" method="post" action="signup.php" enctype="multipart/form-data" novalidate>
 
                         <!-- === STEP 1: Personal Information === -->
                         <section class="step-panel <?php if ($startStep == 1) { echo 'active'; } ?>" id="panel1">
