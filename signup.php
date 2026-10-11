@@ -157,7 +157,7 @@
             ];
             saveUsers($users);
 
-            header('Location: sigin.php?status=registered');
+            header('Location: signin.php?status=registered');
             exit;
         }
     }

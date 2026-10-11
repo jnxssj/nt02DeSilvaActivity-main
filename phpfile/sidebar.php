@@ -30,7 +30,7 @@
                 <i class="bi bi-lightning-charge" aria-hidden="true"></i>
                 Utilities
             </a>
-            <a href="logout.php" class="nav-link">
+            <a href="signout.php" class="nav-link">
                 <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
                 Logout
             </a>

@@ -2,7 +2,7 @@
     require 'phpfile/functions.php';
 
     if (!isset($_SESSION['user'])) {
-        header('Location: singin.php?status=required');
+        header('Location: signin.php?status=required');
         exit;
     }
 
