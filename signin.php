@@ -112,7 +112,7 @@
 
                         <button type="submit" name="login" class="btn-primary">Sign In</button>
 
-                        <p class="switch-text">Don't have an account? <a href="register.php">Sign up</a></p>
+                        <p class="switch-text">Don't have an account? <a href="signup.php">Sign up</a></p>
                     </form>
                 </div>
 
