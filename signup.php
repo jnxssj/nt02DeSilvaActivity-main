@@ -175,9 +175,8 @@
     }
 
     $pageTitle = 'Sign Up';
-    $pageCss   = 'static/register.css';
-    $pageJs    = 'static/register.js';
-
+    $pageCss   = 'static/signup.css';
+    $pageJs    = 'static/signup.js';
 ?>
 
 <!DOCTYPE html>
@@ -335,8 +334,5 @@
         <?php 
             include 'phpfile/scripts.php';
         ?>
-
-        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-        <script src="static/signup.js"></script>
     </body>
 </html>
