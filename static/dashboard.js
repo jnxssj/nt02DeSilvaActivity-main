@@ -18,6 +18,8 @@ const sidebar = document.getElementById('sidebar');
 
     document.querySelectorAll('.side-nav .nav-link').forEach((link) => {
         link.addEventListener('click', (e) => {
+            // Real links and the logout button must behave normally
+            if (link.getAttribute('href') !== '#') return;
             e.preventDefault();
             document.querySelectorAll('.side-nav .nav-link').forEach((l) => l.classList.remove('active'));
             link.classList.add('active');

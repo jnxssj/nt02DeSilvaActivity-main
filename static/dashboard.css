@@ -350,3 +350,9 @@ a { text-decoration: none; }
         right: 32px;
     }
 }
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--p-200);
+}

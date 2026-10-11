@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <?php 
-        include 'phpfile/header.php';
-    ?>
-</head>
-<body>
-    
-</body>
-</html>
+<?php
+    require 'phpfile/functions.php';
+
+    if (isset($_SESSION['user'])) {
+        header('Location: dashboard.php');
+    } else {
+        header('Location: signin.php');
+    }
+    exit;
