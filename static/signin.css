@@ -318,3 +318,14 @@ input.invalid {
         animation: none;
     }
 }
+.form-alert {
+    width: 80%;
+    margin: 0 auto 16px;
+    padding: 10px 14px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+.form-alert.success { background: #e8f7ee; color: #17663a; border: 1px solid #b7e4c7; }
+.form-alert.danger  { background: #fdebee; color: #b3213d; border: 1px solid #f5c2cb; }

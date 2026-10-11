@@ -32,6 +32,8 @@ $(document).ready(function () {
   var $gender = $("#gender");
   var $contact = $("#contact");
   var $houseNo = $("#houseNo");
+  var $street = $("#street");
+  var $purok = $("#purok");
   var $email = $("#email");
   var $password = $("#password");
   var $confirmPassword = $("#confirmPassword");
@@ -42,11 +44,17 @@ $(document).ready(function () {
   var $genderError = $("#genderError");
   var $contactError = $("#contactError");
   var $houseNoError = $("#houseNoError");
+  var $streetError = $("#streetError");
+  var $purokError = $("#purokError");
   var $emailError = $("#emailError");
   var $passwordError = $("#passwordError");
   var $confirmPasswordError = $("#confirmPasswordError");
 
-  var namePattern = /^[A-Za-z\s-]+$/;
+  var namePattern = /^[A-Za-zÀ-ÿ -]{2,50}$/;   
+  var contactPattern = /^09\d{9}$/;
+  var houseNoPattern = /^\d{1,6}$/;
+  var streetPattern = /^[A-Za-z0-9 .,#-]{2,60}$/;
+  var passwordPattern = /^(?=.*[A-Za-z])(?=.*\d).{8,10}$/;
   var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   function showError($input, $errorEl, message) {
@@ -66,7 +74,7 @@ $(document).ready(function () {
       return false;
     }
     if (!namePattern.test(value)) {
-      showError($firstName, $firstNameError, "First name must not contain numbers.");
+      showError($firstName, $firstNameError, "First name must be letters only (2-50 characters).");
       return false;
     }
     clearError($firstName, $firstNameError);
@@ -80,7 +88,7 @@ $(document).ready(function () {
       return false;
     }
     if (!namePattern.test(value)) {
-      showError($lastName, $lastNameError, "Last name must not contain numbers.");
+      showError($lastName, $lastNameError, "Last name must be letters only (2-50 characters).");
       return false;
     }
     clearError($lastName, $lastNameError);
@@ -91,6 +99,10 @@ $(document).ready(function () {
     var value = $dob.val();
     if (value === "") {
       showError($dob, $dobError, "Birthdate is required.");
+      return false;
+    }
+    if (new Date(value) > new Date()) {
+      showError($dob, $dobError, "Birthdate cannot be in the future.");
       return false;
     }
     clearError($dob, $dobError);
@@ -113,8 +125,8 @@ $(document).ready(function () {
       showError($contact, $contactError, "Contact number is required.");
       return false;
     }
-    if (!/^\d+$/.test(value)) {
-      showError($contact, $contactError, "Contact number must contain numbers only.");
+    if (!contactPattern.test(value)) {
+      showError($contact, $contactError, "Use an 11-digit mobile number starting with 09.");
       return false;
     }
     clearError($contact, $contactError);
@@ -127,7 +139,7 @@ $(document).ready(function () {
       showError($houseNo, $houseNoError, "House number is required.");
       return false;
     }
-    if (!/^\d+$/.test(value)) {
+    if (!houseNoPattern.test(value)) {
       showError($houseNo, $houseNoError, "House number must contain numbers only.");
       return false;
     }
@@ -163,7 +175,34 @@ $(document).ready(function () {
       showError($password, $passwordError, "Password must not exceed 10 characters.");
       return false;
     }
+    if (!passwordPattern.test(value)) {
+      showError($password, $passwordError, "Password needs at least one letter and one number.");
+      return false;
+    }
     clearError($password, $passwordError);
+    return true;
+  }
+
+  function validateStreet() {
+    var value = $street.val().trim();
+    if (value === "") {
+      showError($street, $streetError, "Street is required.");
+      return false;
+    }
+    if (!streetPattern.test(value)) {
+      showError($street, $streetError, "Street contains invalid characters.");
+      return false;
+    }
+    clearError($street, $streetError);
+    return true;
+  }
+
+  function validatePurok() {
+    if (!$purok.val()) {
+      showError($purok, $purokError, "Purok is required.");
+      return false;
+    }
+    clearError($purok, $purokError);
     return true;
   }
 
@@ -186,6 +225,8 @@ $(document).ready(function () {
   $lastName.on("input blur", validateLastName);
   $dob.on("change blur", validateDob);
   $gender.on("change blur", validateGender);
+  $street.on("input blur", validateStreet);
+  $purok.on("change blur", validatePurok);
   $email.on("input blur", validateEmail);
   $password.on("input blur", function () {
     validatePassword();
@@ -216,19 +257,14 @@ $(document).ready(function () {
 
   // ---------- Step 1 -> Step 2 ----------
   $("#toStep2").on("click", function () {
-    var street = $("#street").val().trim();
-    var purok = $("#purok").val();
-
     var isValid = validateFirstName();
     isValid = validateLastName() && isValid;
     isValid = validateDob() && isValid;
     isValid = validateGender() && isValid;
     isValid = validateContact() && isValid;
     isValid = validateHouseNo() && isValid;
-
-    if (!street || !purok) {
-      isValid = false;
-    }
+    isValid = validateStreet() && isValid;
+    isValid = validatePurok() && isValid;
 
     if (!isValid) {
       $step1Error.text("Please fix the highlighted fields before continuing.");
@@ -276,47 +312,41 @@ $(document).ready(function () {
 
   $idUpload.on("change", function () {
     if (this.files.length > 0) {
-      $fileLabel.html("Selected file: <strong>" + this.files[0].name + "</strong>");
+      $fileLabel.empty().append("Selected file: ", $("<strong>").text(this.files[0].name));
     }
   });
 
-  // ---------- Final submit: re-validate everything ----------
+  // ---------- Final submit ----------
   $("#signupForm").on("submit", function (event) {
-    event.preventDefault();
+    var step1Ok = validateFirstName();
+    step1Ok = validateLastName() && step1Ok;
+    step1Ok = validateDob() && step1Ok;
+    step1Ok = validateGender() && step1Ok;
+    step1Ok = validateContact() && step1Ok;
+    step1Ok = validateHouseNo() && step1Ok;
+    step1Ok = validateStreet() && step1Ok;
+    step1Ok = validatePurok() && step1Ok;
 
-    var isValid = validateFirstName();
-    isValid = validateLastName() && isValid;
-    isValid = validateDob() && isValid;
-    isValid = validateGender() && isValid;
-    isValid = validateContact() && isValid;
-    isValid = validateHouseNo() && isValid;
-    isValid = validateEmail() && isValid;
-    isValid = validatePassword() && isValid;
-    isValid = validateConfirmPassword() && isValid;
+    var step2Ok = validateEmail();
+    step2Ok = validatePassword() && step2Ok;
+    step2Ok = validateConfirmPassword() && step2Ok;
 
-    if ($idUpload[0].files.length === 0) {
-      $step3Error.text("Please upload a valid ID to finish signing up.");
-      isValid = false;
-    } else {
-      $step3Error.text("");
+    var hasFile = $idUpload[0].files.length > 0;
+    $step3Error.text(hasFile ? "" : "Please upload a valid ID to finish signing up.");
+
+    if (!step1Ok) {
+      event.preventDefault();
+      showPanel($panel1);
+      setActiveDot($dot1);
+      $step1Error.text("Please fix the highlighted fields before continuing.");
+    } else if (!step2Ok) {
+      event.preventDefault();
+      showPanel($panel2);
+      setActiveDot($dot2);
+      $step2Error.text("Please fix the highlighted fields before continuing.");
+    } else if (!hasFile) {
+      event.preventDefault();
     }
-
-    if (!isValid) {
-      // Send the user back to whichever step has the problem
-      if (!validateFirstName() || !validateLastName() || !validateDob() || !validateGender() || !validateContact() || !validateHouseNo()) {
-        showPanel($panel1);
-        setActiveDot($dot1);
-        $step1Error.text("Please fix the highlighted fields before continuing.");
-      } else if (!validateEmail() || !validatePassword() || !validateConfirmPassword()) {
-        showPanel($panel2);
-        setActiveDot($dot2);
-        $step2Error.text("Please fix the highlighted fields before continuing.");
-      }
-      return;
-    }
-
-    alert("Account created! (This is a demo — connect it to a real server to go live.)");
-    window.location.href = "signin.php";
   });
 
 });

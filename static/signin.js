@@ -57,29 +57,26 @@ $(document).ready(function () {
     return true;
   }
 
-  // Real-time validation: check while typing and when leaving the field
   $email.on("input blur", validateEmail);
   $password.on("input blur", validatePassword);
 
-  // Final validation on submit
-  $form.on("submit", function (event) {
-    event.preventDefault();
 
+  $form.on("submit", function (event) {
     var isEmailValid = validateEmail();
     var isPasswordValid = validatePassword();
 
     if (!isEmailValid) {
+      event.preventDefault();
       $email.focus();
       return;
     }
 
     if (!isPasswordValid) {
+      event.preventDefault();
       $password.focus();
       return;
     }
 
-    // All fields valid — keep existing behavior
-    window.location.href = "dashboard.php";
   });
 
 });
